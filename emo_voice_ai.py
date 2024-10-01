@@ -1,3 +1,8 @@
+"""
+This module handles the speech-to-emotion detection process using a pre-trained CNN + LSTM model.
+It captures audio, processes it, detects emotion, and sends the result to a WebSocket server.
+"""
+
 import os
 import numpy as np
 import librosa
@@ -16,8 +21,11 @@ if not os.path.exists(model_path):
 model = load_model(model_path)
 
 
-# Function to recognize speech and return audio
 def capture_audio():
+    """
+    Captures audio from the microphone and returns the audio object.
+    Returns None if there's an error during capturing.
+    """
     recognizer = sr.Recognizer()
     mic = sr.Microphone()
     with mic as source:
@@ -29,23 +37,33 @@ def capture_audio():
         except sr.WaitTimeoutError:
             print("Listening timed out while waiting for speech.")
             return None
-        except Exception as e:
+        except sr.RequestError as e:
             print(f"Error capturing audio: {e}")
             return None
 
 
-# Function to save recognized audio to a temporary file
 def save_audio(audio):
+    """
+    Saves the captured audio to a temporary .wav file.
+    Returns the path of the saved file, or None if an error occurs.
+    """
     if audio is None:
         return None
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_audio_file:
-        with open(temp_audio_file.name, "wb") as f:
-            f.write(audio.get_wav_data())
-        return temp_audio_file.name
+    try:
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_audio_file:
+            with open(temp_audio_file.name, "wb") as f:
+                f.write(audio.get_wav_data())
+            return temp_audio_file.name
+    except Exception as e:
+        print(f"Error saving audio: {e}")
+        return None
 
 
-# Function to extract MFCC features from the audio signal
 def extract_audio_features(audio_path):
+    """
+    Extracts MFCC features from the given audio file.
+    Pads or truncates the features to match the expected input length.
+    """
     try:
         y, sr = librosa.load(audio_path, sr=22050)
     except Exception as e:
@@ -66,8 +84,11 @@ def extract_audio_features(audio_path):
     return np.expand_dims(mfccs.T, axis=0)
 
 
-# Classify emotion based on extracted features
 def detect_emotion(audio_path):
+    """
+    Detects emotion from the audio file at the given path.
+    Returns the detected emotion or 'uncertain' if confidence is low.
+    """
     features = extract_audio_features(audio_path)
     if features is None:
         return "Error in feature extraction"
@@ -80,12 +101,13 @@ def detect_emotion(audio_path):
 
     if confidence > 0.6:
         return emotion_labels[np.argmax(prediction)]
-    else:
-        return "uncertain"
+    return "uncertain"
 
 
-# Real-time communication with WebSocket server
 async def send_emotion_to_server(emotion):
+    """
+    Sends the detected emotion to a WebSocket server running on localhost:8765.
+    """
     uri = "ws://localhost:8765"
     try:
         async with websockets.connect(uri) as websocket:
@@ -98,8 +120,11 @@ async def send_emotion_to_server(emotion):
         print(f"Error during WebSocket communication: {e}")
 
 
-# Main function to handle the entire flow
 def run_emotion_recognition():
+    """
+    Main function to run the entire emotion recognition process.
+    Captures audio, detects emotion, and sends the emotion to a WebSocket server.
+    """
     print("Starting Emo-Speech AI Robot...")
 
     # Capture and process audio
