@@ -8,8 +8,8 @@ import asyncio
 import tempfile
 import numpy as np
 import librosa
-from tensorflow.keras.models import load_model
-import speech_recognition as sr
+from tensorflow.keras.models import load_model  # pylint: disable=E0401,E0611
+import speech_recognition as sr  # Global scope
 import websockets
 
 # Load pre-trained emotion detection model (CNN + LSTM)
@@ -65,13 +65,13 @@ def extract_audio_features(audio_path):
     Pads or truncates the features to match the expected input length.
     """
     try:
-        y, sr = librosa.load(audio_path, sr=22050)
+        y, sample_rate = librosa.load(audio_path, sr=22050)  # Renamed local 'sr' to 'sample_rate'
     except FileNotFoundError as e:
         print(f"Error loading audio file {audio_path}: {e}")
         return None
 
     # Extract only MFCCs to match the input of the trained model
-    mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=40)
+    mfccs = librosa.feature.mfcc(y=y, sr=sample_rate, n_mfcc=40)
 
     # Pad or truncate to ensure consistent time steps (e.g., 130)
     fixed_length = 130
