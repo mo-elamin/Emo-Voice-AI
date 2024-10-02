@@ -10,7 +10,7 @@ import numpy as np
 import librosa
 from tensorflow.keras.models import load_model  # pylint: disable=E0401,E0611
 import speech_recognition as sr  # Global scope
-import websockets
+import websockets  # pylint: disable=E0401
 
 # Load pre-trained emotion detection model (CNN + LSTM)
 model_path = os.path.expanduser('~/PycharmProjects/Emo-speech-training/emotion_model.keras')
