@@ -26,7 +26,7 @@ def capture_audio():
     Captures audio from the microphone and returns the audio object.
     Returns None if there's an error during capturing.
     """
-    recognizer = sr.Recognizer()
+    recognizer = sr.Recognizer()  # Rename to avoid shadowing the global 'sr'
     mic = sr.Microphone()
     with mic as source:
         print("Listening for speech...")
