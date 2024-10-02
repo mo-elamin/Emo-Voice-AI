@@ -4,13 +4,13 @@ It captures audio, processes it, detects emotion, and sends the result to a WebS
 """
 
 import os
+import asyncio
+import tempfile
 import numpy as np
 import librosa
 from tensorflow.keras.models import load_model
 import speech_recognition as sr
-import asyncio
 import websockets
-import tempfile
 
 # Load pre-trained emotion detection model (CNN + LSTM)
 model_path = os.path.expanduser('~/PycharmProjects/Emo-speech-training/emotion_model.keras')
@@ -54,7 +54,7 @@ def save_audio(audio):
             with open(temp_audio_file.name, "wb") as f:
                 f.write(audio.get_wav_data())
             return temp_audio_file.name
-    except Exception as e:
+    except FileNotFoundError as e:
         print(f"Error saving audio: {e}")
         return None
 
@@ -66,7 +66,7 @@ def extract_audio_features(audio_path):
     """
     try:
         y, sr = librosa.load(audio_path, sr=22050)
-    except Exception as e:
+    except FileNotFoundError as e:
         print(f"Error loading audio file {audio_path}: {e}")
         return None
 
@@ -116,8 +116,8 @@ async def send_emotion_to_server(emotion):
             print(f"Server response: {response}")
     except websockets.ConnectionClosed as e:
         print(f"Connection to server failed: {e}")
-    except Exception as e:
-        print(f"Error during WebSocket communication: {e}")
+    except websockets.InvalidMessage as e:
+        print(f"Invalid message: {e}")
 
 
 def run_emotion_recognition():
