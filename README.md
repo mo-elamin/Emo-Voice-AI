@@ -36,3 +36,7 @@ To set up and run the Emo-Voice-AI project on your local machine, follow these s
 git clone https://github.com/mo-elamin/Emo-Voice-AI.git
 cd Emo-Voice-AI
 ```
+python -m venv .venv
+source .venv/bin/activate  # For Windows: .venv\Scripts\activate
+
+pip install -r requirements.txt
