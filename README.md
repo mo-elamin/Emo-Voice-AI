@@ -36,7 +36,42 @@ To set up and run the Emo-Voice-AI project on your local machine, follow these s
 git clone https://github.com/mo-elamin/Emo-Voice-AI.git
 cd Emo-Voice-AI
 ```
+
+2. Create a Virtual Environment
+
+```bash
 python -m venv .venv
 source .venv/bin/activate  # For Windows: .venv\Scripts\activate
+```
 
+3. Install Dependencies
+
+Install all required Python libraries:
+
+```bash
 pip install -r requirements.txt
+```
+4. Train or Use Pre-trained Model
+
+The project assumes that you have a pre-trained emotion detection model stored at: ~/PycharmProjects/Emo-speech-training/emotion_model.keras. If you do not have this model, you will need to train one separately or acquire an emotion recognition model.
+
+5. Run the WebSocket Server
+
+First, start the WebSocket server that will receive emotion data:
+
+```bash
+python websocket_server.py
+```
+You should see the following message:
+```bash
+WebSocket server started on ws://localhost:8765
+```
+6. Run the Emotion Recognition Script
+
+With the WebSocket server running, start the emotion recognition script:
+```bash
+python emo_voice_ai.py
+```
+This will capture real-time audio, process it, detect emotions, and send the results to the WebSocket server.
+
+
