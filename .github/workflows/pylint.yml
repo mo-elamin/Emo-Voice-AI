@@ -5,27 +5,29 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12"]
 
     steps:
       # Step 1: Checkout the code
       - uses: actions/checkout@v4
 
-      # Step 2: Set up Python 3.12.6
-      - name: Set up Python 3.12.6
+      # Step 2: Set up Python with the specified version
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
-          python-version: "3.12.6"
+          python-version: ${{ matrix.python-version }}
 
-      # Step 3: Install dependencies with compatible versions
+      # Step 3: Install dependencies with distutils
       - name: Install dependencies
         run: |
-          python -m ensurepip --upgrade
-          python -m pip install --upgrade pip setuptools distutils
+          sudo apt-get install python3-distutils
+          python -m pip install --upgrade pip setuptools
           pip install pylint
           pip install numpy==1.24.4 librosa==0.10.2 tensorflow==2.9.1
           pip install speechrecognition==3.8.1
           pip install websockets  # Added websockets installation
-      
 
       # Step 4: Run Pylint
       - name: Analyze the code with pylint
