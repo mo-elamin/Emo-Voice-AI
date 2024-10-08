@@ -1,4 +1,6 @@
 Emo-Voice-AI
+![Python](https://img.shields.io/badge/python-3.12%2B-blue)
+![Build Status](https://github.com/mo-elamin/NeuralNetwork-Translator/actions/workflows/pylint.yml/badge.svg)
 
 Emo-Voice-AI: is an AI-driven speech-to-emotion recognition system. It captures audio in real-time, processes the speech using a pre-trained CNN + LSTM model, detects the emotion, and sends the result to a WebSocket server. This project leverages Python libraries such as TensorFlow, Librosa, SpeechRecognition, and WebSockets for real-time emotion recognition and communication.
 
