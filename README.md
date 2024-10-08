@@ -74,4 +74,49 @@ python emo_voice_ai.py
 ```
 This will capture real-time audio, process it, detect emotions, and send the results to the WebSocket server.
 
+Usage Example
 
+- The program captures audio using your microphone.
+- The audio is processed, and the emotion is detected (e.g., happiness, sadness, fear, anger).
+- The detected emotion is sent to the WebSocket server and echoed back.
+
+You should see output similar to this:
+```bash
+Starting Emo-Speech AI Robot...
+Listening for speech...
+Detected Emotion: happiness
+Server response: Echo: happiness
+```
+WebSocket Server
+The WebSocket server (websocket_server.py) listens for incoming WebSocket connections and echoes the received emotion data. It uses the websockets Python library and runs on ws://localhost:8765.
+
+Testing and Linting
+
+This project uses Pylint for code quality checks. You can run Pylint on the codebase by executing:
+
+```bash
+pylint emo_voice_ai.py websocket_server.py
+```
+This will analyze the Python scripts for errors and style consistency.
+
+Contributing
+
+If you would like to contribute to this project, please follow these steps:
+
+- Fork the repository.
+- Create a new branch for your feature or bugfix.
+- Commit your changes and push them to your forked repository.
+- Submit a pull request with a description of your changes.
+
+Acknowledgements
+
+This project is based on the combination of speech recognition, emotion detection, and real-time communication technologies. Special thanks to the developers of TensorFlow, Librosa, SpeechRecognition, and websockets for providing the tools that made this project possible.
+
+Key Components in the README:
+
+- Project Overview: Describes what the project does.
+- Setup Instructions: Step-by-step guide to set up the environment, install dependencies, and run the scripts.
+- WebSocket Server: Explains how the server works and the interaction between emotion detection and server communication.
+- Usage Example: Demonstrates how the project works with sample output.
+- Contributing: Guidelines for contributing to the project.
+- License: Details the licensing of the project.
